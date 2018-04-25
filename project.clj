@@ -1,7 +1,8 @@
-(defproject reagent-template "0.0.1"
+(defproject clojurescript-w3c-custom-element  "0.0.1"
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
-                 [reagent "0.8.0"]]
+                 [reagent "0.8.0"]
+                 [lucuma "0.5.1"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
@@ -24,8 +25,8 @@
   {:builds
    {:dev {:source-paths ["src"]
           :figwheel true
-          :compiler {:main kundel.core
-                     :output-to "resources/public/js/main.js"
+          :compiler {:main kundel.element
+                     :output-to "resources/public/js/element.js"
                      :output-dir "resources/public/js/out/"
                      :asset-path "js/out"
                      :optimizations :none
@@ -34,7 +35,7 @@
                      :preloads [devtools.preload]
                      :external-config {:devtools/config {:features-to-install :all}}}}
     :min {:source-paths ["src"]
-          :compiler {:output-to "resources/public/js/main.js"
+          :compiler {:output-to "resources/public/js/element.js"
                      :output-dir "resources/public/js/min-out/"
                      :asset-path "js/min-out"
                      :optimizations   :advanced

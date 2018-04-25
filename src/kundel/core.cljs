@@ -11,3 +11,5 @@
   (r/render
     [my-app]
     (js/document.getElementById "appdiv")))
+
+(defn ^:export register [])

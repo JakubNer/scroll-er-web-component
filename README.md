@@ -1,3 +1,18 @@
+# W3C Custom Element in ClojureScript
+
+Template leveraging Lucuma (https://github.com/jeluard/lucuma) and hooking it up with Reagent (https://github.com/reagent-project/reagent).
+
+The custom element source code is in *src/kundel/element.cljs*.  This example
+renders an image.
+
+The *register* export out of *element.cljs* registers your new custom element  for
+use in the DOM.
+
+Once built--see below--the element will be rendered to a JavaScript in
+*resources/public/js/element.js*.
+
+The *resources/public/index.html* is a demo of the custom element.a
+
 ## Dev Run Application:
 
 ```
