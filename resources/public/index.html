@@ -1,12 +1,52 @@
   <html>
+    <style>
+        #screen {
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            overflow: none;
+            margin: 0 auto;
+            resize: both;
+        }
+
+        #container {
+            background: lightgrey;
+            width: 50%;
+            height: 50%;
+            margin: 0 auto;
+        }
+    </style>
     <body>
-        <script src="js/element.js"></script>                               <!-- load custom element script -->
-        <script>kundel.element.register()</script>                          <!-- register custom element -->
-        <my-element id="meh-catcher" some-text="foo bar baz"></my-element>  <!-- use custom element -->
+        <script src="js/scroll-er.js"></script>
+        <script>kundel.scroll_er.register()</script>
+        <div id="screen">
+            <div id="container">
+                <scroll-er id="scroll-er"></scroll-er>
+            </div>
+        </div>
     </body>
     <script>
-        var catcher = document.getElementById('meh-catcher');               /* listen to custom element event */
-        console.log("catching on :: " + catcher);
-        catcher.addEventListener('meh', function(e) {alert("custom listener :: " + e.detail);}, true);
+        var scroller = document.getElementById('scroll-er');
+
+        // dictionary of page titles to event strings; each key is page title, each value an event string.
+        // number of key-value pairs is the number of pages.
+        var my_pages = {
+            "description page 1":"page1",
+            "description page 2":"page2",
+            "super long description of page3 that shouldn't fit anywhere and must be trimmed":"page3",
+            "description page 4":"page4"
+        };
+        my_current = "page2";
+
+        scroller.setAttribute("pages",my_pages);
+        scroller.setAttribute("current",my_current);
+        scroller.setAttribute("horizontal",false);
+
+        console.log("catching on :: " + scroller);
+        // should be the event string from my_pages configuration.
+        scroller.addEventListener('goto', function(e) {alert("goto page listener :: " + e.detail);}, true);
     </script>
 </html>

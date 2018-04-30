@@ -15,7 +15,7 @@ The *resources/public/index.html* is a demo of the custom element.a
 
 ## Dev Run Application:
 
-```
+```aaa
 lein clean
 lein figwheel dev
 ```
@@ -45,4 +45,22 @@ Once started paste the following in the IntelliJ REPL (Alt-8)
 ```
 (use 'figwheel-sidecar.repl-api)
 (cljs-repl)
+```
+
+## Run Unit Tests
+
+The *dev* build compiles unit tests.
+
+To run them, start the REPL:
+
+```
+lein figwheel dev
+```
+
+In the REPL source the test runner and run the tests:
+
+```
+    (in-ns 'kundel-runner')
+    (require '[kundel.runner :as t] :reload)
+    (t/run)
 ```

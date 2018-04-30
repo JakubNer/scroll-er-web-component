@@ -23,10 +23,10 @@
 
   :cljsbuild
   {:builds
-   {:dev {:source-paths ["src"]
+   {:dev {:source-paths ["src" "test"]
           :figwheel true
-          :compiler {:main kundel.element
-                     :output-to "resources/public/js/element.js"
+          :compiler {:main kundel.scroll-er
+                     :output-to "resources/public/js/scroll-er.js"
                      :output-dir "resources/public/js/out/"
                      :asset-path "js/out"
                      :optimizations :none
@@ -35,7 +35,7 @@
                      :preloads [devtools.preload]
                      :external-config {:devtools/config {:features-to-install :all}}}}
     :min {:source-paths ["src"]
-          :compiler {:output-to "resources/public/js/element.js"
+          :compiler {:output-to "resources/public/js/scroll-er.js"
                      :output-dir "resources/public/js/min-out/"
                      :asset-path "js/min-out"
                      :optimizations   :advanced
