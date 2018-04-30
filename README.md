@@ -1,21 +1,30 @@
-# W3C Custom Element in ClojureScript
+# Scroller W3C Custom Element
 
-Template leveraging Lucuma (https://github.com/jeluard/lucuma) and hooking it up with Reagent (https://github.com/reagent-project/reagent).
+## Summary
 
-The custom element source code is in *src/kundel/element.cljs*.  This example
-renders an image.
+A page-by-page crollbar with a pull-out.
 
-The *register* export out of *element.cljs* registers your new custom element  for
-use in the DOM.
+Compnent registered as "scroll-er".
 
-Once built--see below--the element will be rendered to a JavaScript in
-*resources/public/js/element.js*.
+### Attributes
 
-The *resources/public/index.html* is a demo of the custom element.a
+#### pages
+
+Dictionary of page titles to event strings; each key is a page title, each value an event string.
+
+Number of key-value pairs is the number of pages.
+
+#### current
+
+Title of currently selected page.
+
+#### horizontal
+
+If *true*, the scroller will be at the bottom and pages will be side-to-side.
 
 ## Dev Run Application:
 
-```aaa
+```
 lein clean
 lein figwheel dev
 ```

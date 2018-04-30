@@ -1,6 +1,6 @@
 (ns kundel.smoke-test
   (:require [cljs.test :refer-macros [deftest is testing]]
-            [kundel.scroll-er :as s]))
+            [kundel.component :as s]))
 
 (deftest buttons-4
   (testing "4 buttons"

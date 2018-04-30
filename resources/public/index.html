@@ -33,17 +33,18 @@
 
         // dictionary of page titles to event strings; each key is page title, each value an event string.
         // number of key-value pairs is the number of pages.
-        var my_pages = {
+        my_pages = {
             "description page 1":"page1",
             "description page 2":"page2",
             "super long description of page3 that shouldn't fit anywhere and must be trimmed":"page3",
             "description page 4":"page4"
         };
+
         my_current = "page2";
 
-        scroller.setAttribute("pages",my_pages);
-        scroller.setAttribute("current",my_current);
-        scroller.setAttribute("horizontal",false);
+        scroller.setAttribute("pages", JSON.stringify(my_pages));
+        scroller.setAttribute("current", my_current);
+        scroller.setAttribute("horizontal", false);
 
         console.log("catching on :: " + scroller);
         // should be the event string from my_pages configuration.

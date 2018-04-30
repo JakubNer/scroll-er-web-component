@@ -1,63 +1,74 @@
 (ns kundel.scroll-er
   (:require
+    [goog.object :as go]
     [reagent.core :as r]
-    [lucuma.core :as lc]))
+    [kundel.component :as c]))
 
-(defn fire-event [this]
-  (let [some-text (js->clj (.-some-text this))
-        event (.createEvent js/document "Event")]
-    (.log js/console "created event :: " event)
-    (.log js/console "against element :: " this)
-    (.initEvent event "meh" true true)
-    (aset event "detail" (str "Text added by event to " some-text))
-    (.dispatchEvent this event)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; w3c custom element registration and callback handlers.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn get-button-size [num-sections]
-      2)
+;; Registration occurs by calling the exported 'register' below.
 
-(defn get-space-size [num-sections]
-      2)
+;; The registered element will have the following name:
+(def element-name "scroll-er")
 
-(defn get-text-ems [title-col]
-      2)
+;; The registered element works with the following attributes.
+;;
+;; NOTE:
+;;   A reagent atom is created for each of the component's attributes.
+;;
+;;   The reagent component render function gets 'element' and 'attrs'
+;;   properties.  The 'attrs' property contains the ratom with these
+;;   element properties.  To read the value in the reagent component:
+;;
+;;      @(get attrs "some-text")
+;;
+;;   Note that each 'attrs' has to have a corresponding 'fns' entry below.
+;;
+;; Modify these to suite your element:
+(def attrs {"pages" (r/atom nil)
+            "current" (r/atom nil)
+            "horizontal" (r/atom nil)})
 
-(defn render-horizontal [this]
-  [:div {:style {:position "fixed"
-                 :bottom   "0"
-                 :left     "0"
-                 :height   "1em"
-                 :width    "100%"}}])
+;; Custom translation functions for each attribute.
+;; %1 is original property value, %2 is the new value.
+;; Examples:
+;;    #(do %2)              ;; just replaces old value.
+;;    #(.parse js/JSON %2)  ;; parses JSON into JS object
+;;    #(= "true" %2)        ;; parses boolean
+;; This list's keys must match the 'attrs' list.
+(def fns {"pages" #(js->clj (.parse js/JSON %2))
+          "current" #(do %2)
+          "horizontal" #(= "true" %2)})
 
-(defn render-vertical [this]
-  [:div {:style {:position "fixed"
-                 :top      "0"
-                 :right    "0"
-                 :width    "1em"
-                 :height   "100%"}}])
+;; events:  "goto" :: event detail is page title to go to.
 
-(defn root [this]
-  (let [horizontal? (.-horizontal this)
-        pages (.-pages this)]
-        ;titles (keys pages)
-        ;pages-count (count titles)
-        ;button-size (get-button-size pages-count)
-        ;space-size (get-space-size pages-count)
-        ;text-ems (get-text-ems titles)]
-    (.log js/console " :: " pages)
-    (if horizontal?
-      (render-horizontal this)
-      (render-vertical this))))
 
-(lc/defcustomelement scroll-er
-                  :on-created #()
-                  :on-attached #(r/render [root %] %)
-                  :on-property-changed #(do
-                                          (.log js/console "on-property-changed")
-                                          (r/render [root %1] %1))
-                  :properties {:pages {:default {} :type :object :attributes? true},
-                               :current {:default "" :type :string}
-                               :horizontal {:type :boolean :default false}})
 
+
+
+;; NO NEED TO MODIFY ANYTHING BELOW
+
+(defn created [this]
+  (doseq [keyval attrs]
+    (swap! (val keyval) (get fns (key keyval)) (.getAttribute this (key keyval))))
+  (r/render [c/render this attrs] this))      ;; attach reagent component
+
+(defn attached [this]) ;; not wired into reagent component
+
+(defn detached [this]) ;; not wired into reagent component
+
+(defn changed [this property-name old-value new-value]
+  (swap! (get attrs property-name) (get fns property-name) (.getAttribute this property-name)))
+
+;; register the w3c custom element.
 (defn ^:export register []
-  (lc/register scroll-er))
-
+  (when (.-registerElement js/document)
+    (let [proto (.create js/Object (.-prototype js/HTMLElement))
+          proto' (go/create "createdCallback" #(this-as this (created this))
+                            "attachedCallback" #(this-as this (attached this))
+                            "detachedCallback" #(this-as this (detached this))
+                            "attributeChangedCallback" #(this-as this (changed this %1 %2 %3)))]
+      (go/extend proto proto')
+      (.registerElement js/document element-name #js{"prototype" proto}))))

@@ -2,7 +2,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.8.0"]
-                 [lucuma "0.5.1"]]
+                 [philoskim/debux "0.4.1"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
