@@ -6,9 +6,9 @@ A page-by-page scrollbar with a pull-out to see page descriptions.
 
 Supports vertical and horizontal layout:
 
-[[https://github.com/JakubNer/scroll-er-web-component/blob/master/assets/vertical.gif|alt=octocat]]
+![vertical][https://github.com/JakubNer/scroll-er-web-component/blob/master/assets/vertical.gif|alt=octocat]
 
-[[https://github.com/JakubNer/scroll-er-web-component/blob/master/assets/horizontal.gif|alt=octocat]]
+![horizontal][https://github.com/JakubNer/scroll-er-web-component/blob/master/assets/horizontal.gif|alt=octocat]
 
 Compnent registered as "scroll-er".
 
