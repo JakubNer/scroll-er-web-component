@@ -29,7 +29,9 @@
 ;; Modify these to suite your element:
 (def attrs {"pages" (r/atom nil)
             "current" (r/atom nil)
-            "horizontal" (r/atom nil)})
+            "horizontal" (r/atom nil)
+            "collapsed-width-em" (r/atom nil)
+            "unfurled-width-em" (r/atom nil)})
 
 ;; Custom translation functions for each attribute.
 ;; %1 is original property value, %2 is the new value.
@@ -40,7 +42,9 @@
 ;; This list's keys must match the 'attrs' list.
 (def fns {"pages" #(js->clj (.parse js/JSON %2))
           "current" #(do %2)
-          "horizontal" #(= "true" %2)})
+          "horizontal" #(= "true" %2)
+          "collapsed-width-em" #(identity 1)
+          "unfurled-width-em" #(identity 20)})
 
 ;; events:  "goto" :: event detail is page title to go to.
 
