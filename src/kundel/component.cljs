@@ -5,11 +5,15 @@
 
 (def unfurled? (r/atom false))
 
+(defn fire-event [this event-text]
+  "Dispatch 'goto' events."
+  (let [event (.createEvent js/document "Event")]
+    (.initEvent event "goto" true true)
+    (aset event "detail" event-text)
+    (.dispatchEvent this event)))
+
 (defn get-button-size [num-sections]
   (/ 100 num-sections))
-
-(defn get-text-ems [title-col]
-      20)
 
 (defn get-animated-style-map [dimension-k collapsed-width-em unfurled-width-em]
   {:-webkit-transition (str (name dimension-k) " .5s ease-in-out")
@@ -18,7 +22,7 @@
    :transition (str (name dimension-k) " .5s ease-in-out")
    dimension-k (str (if @unfurled? unfurled-width-em collapsed-width-em) "em")})
 
-(defn render-horizontal [this titles events button-size collapsed-width-em unfurled-width-em]
+(defn render-horizontal [this pages current button-size collapsed-width-em unfurled-width-em]
   (let [unfurled-container-width-em (+ unfurled-width-em 2)
         half-text-width-em (/ unfurled-width-em 2)]
     [:div
@@ -28,16 +32,20 @@
                            :background-color "black"
                            :bottom           "0"
                            :left             "0"
-                           :width            "100%"})}
-      (for [title titles]
-        (let [half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
+                           :width            "100%"})
+            :on-mouse-leave #(reset! unfurled? false)}
+      (for [page pages]
+        (let [title (key page)
+              event (val page)
+              half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
           [:div {:style {:position         "relative"
-                         :background-color "white"
+                         :background-color (if (= current event) "lightgrey" "white")
                          :height           (str unfurled-container-width-em "em")
                          :width            (str button-size "%")
                          :top              "2px"
                          :margin-left      "1px"
-                         :margin-right     "1px"}}
+                         :margin-right     "1px"}
+                 :on-click #(fire-event this event)}
            [:div {:style {:position "absolute"
                           :top      "50%"
                           :left     "50%"}}
@@ -78,7 +86,7 @@
                                   black 80%, black 100%)"}
              :on-click #(reset! unfurled? (not @unfurled?))}]]]))
 
-(defn render-vertical [this titles events button-size collapsed-width-em unfurled-width-em]
+(defn render-vertical [this pages current button-size collapsed-width-em unfurled-width-em]
   (let [unfurled-container-width-em (+ unfurled-width-em 2)
         half-text-width-em (/ unfurled-width-em 2)]
     [:div
@@ -87,16 +95,20 @@
                            :background-color "black"
                            :top              "0"
                            :right            "0"
-                           :height           "100%"})}
-      (for [title titles]
-        (let [half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
+                           :height           "100%"})
+            :on-mouse-leave #(reset! unfurled? false)}
+      (for [page pages]
+        (let [title (key page)
+              event (val page)
+              half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
           [:div {:style {:position         "relative"
-                         :background-color "white"
+                         :background-color (if (= current event) "lightgrey" "white")
                          :height           (str button-size "%")
                          :width            (str unfurled-container-width-em "em")
                          :left             "2px"
                          :margin-top       "1px"
-                         :margin-bottom    "1px"}}
+                         :margin-bottom    "1px"}
+                 :on-click #(fire-event this event)}
            [:div {:style {:position "absolute"
                           :top      "50%"
                           :left     "50%"}}
@@ -135,14 +147,12 @@
 
 (defn render [this attrs]
   (let [horizontal? @(get attrs "horizontal")
-        pages @(get attrs "pages")
+        pages (into [] @(get attrs "pages"))
+        current @(get attrs "current")
         collapsed-width-em @(get attrs "collapsed-width-em")
         unfurled-width-em @(get attrs "unfurled-width-em")
-        titles (keys pages)
-        events (vals pages)
-        pages-count (count titles)
-        button-size (get-button-size pages-count)
-        text-ems (get-text-ems titles)]
+        pages-count (count pages)
+        button-size (get-button-size pages-count)]
     (if horizontal?
-      (render-horizontal this titles events button-size collapsed-width-em unfurled-width-em)
-      (render-vertical this titles events button-size collapsed-width-em unfurled-width-em))))
+      (render-horizontal this pages current button-size collapsed-width-em unfurled-width-em)
+      (render-vertical this pages current button-size collapsed-width-em unfurled-width-em))))

@@ -43,13 +43,15 @@
 
             scroller.setAttribute("pages", JSON.stringify(my_pages));
             scroller.setAttribute("current", my_current);
-            scroller.setAttribute("horizontal", true);
+            scroller.setAttribute("horizontal", false);
 
             kundel.scroll_er.created(scroller);
 
             console.log("catching on :: " + scroller);
             // should be the event string from my_pages configuration.
-            scroller.addEventListener('goto', function(e) {alert("goto page listener :: " + e.detail);}, true);
+            scroller.addEventListener('goto', function(e) {
+                    kundel.scroll_er.changed(scroller,"current",null,e.detail);
+                }, true);
         </script>
     </body>
 </html>
