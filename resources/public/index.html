@@ -20,12 +20,11 @@
         }
     </style>
     <body>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/custom-elements-es5-adapter.js"></script>
         <script src="js/scroll-er.js"></script>
         <script>kundel.scroll_er.register()</script>
         <div id="screen">
             <div id="container">
-                <scroll-er id="scroll-er"></scroll-er>
+                <div id="scroll-er"></div>
             </div>
         </div>
         <script>
@@ -45,6 +44,8 @@
             scroller.setAttribute("pages", JSON.stringify(my_pages));
             scroller.setAttribute("current", my_current);
             scroller.setAttribute("horizontal", false);
+
+            kundel.scroll_er.created(scroller);
 
             console.log("catching on :: " + scroller);
             // should be the event string from my_pages configuration.

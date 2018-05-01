@@ -54,7 +54,7 @@
 
 ;; NO NEED TO MODIFY ANYTHING BELOW
 
-(defn created [this]
+(defn ^:export created [this]
   (doseq [keyval attrs]
     (swap! (val keyval) (get fns (key keyval)) (.getAttribute this (key keyval))))
   (r/render [c/render this attrs] this))      ;; attach reagent component
@@ -63,8 +63,8 @@
 
 (defn detached [this]) ;; not wired into reagent component
 
-(defn changed [this property-name old-value new-value]
-  (swap! (get attrs property-name) (get fns property-name) (.getAttribute this property-name)))
+(defn ^:export changed [this property-name old-value new-value]
+  (swap! (get attrs property-name) (get fns property-name) new-value))
 
 ;; register the w3c custom element.
 (defn ^:export register []
