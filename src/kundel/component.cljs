@@ -36,7 +36,14 @@
                        :top              "2px"
                        :margin-left      "1px"
                        :margin-right     "1px"}}
-         "FOO FOO BAR BAZ"]))]
+         [:div {:style {:-webkit-transform "rotate(-90deg)"
+                        :-moz-transform    "rotate(-90deg)"
+                        :-ms-transform     "rotate(-90deg)"
+                        :-o-transform      "rotate(-90deg)"
+                        :position          "absolute"
+                        :left              (str (/ button-size 2) "%")
+                        :bottom            (str (/ unfurled-width-em 2) "em")}}
+          "FOO FOO BAR BAZ"]]))]
    [:div {:style (merge (get-animated-style-map :bottom collapsed-width-em unfurled-width-em)
                         {:position "fixed"
                          :left     "50%"})}
@@ -80,7 +87,11 @@
                        :left             "2px"
                        :margin-top       "1px"
                        :margin-bottom    "1px"}}
-         "FOO FOO BAR BAZ"]))]
+         [:div {:style {:position        "absolute"
+                        :text-align      "center"
+                        :width           (str unfurled-width-em "em")
+                        :top             "30%"}}
+           "FOO FOO BAR BAZ"]]))]
    [:div {:style (merge (get-animated-style-map :right collapsed-width-em unfurled-width-em)
                         {:position "fixed"
                          :top      "50%"})}
