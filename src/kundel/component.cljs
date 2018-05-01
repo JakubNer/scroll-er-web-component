@@ -38,13 +38,16 @@
         (let [title (key page)
               event (val page)
               half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
-          [:div {:style {:position         "relative"
+          [:div {:key   (gensym "key-")
+                 :style {:position         "relative"
                          :background-color (if (= current event) "lightgrey" "white")
                          :height           (str unfurled-container-width-em "em")
                          :width            (str button-size "%")
                          :top              "2px"
                          :margin-left      "1px"
-                         :margin-right     "1px"}
+                         :margin-right     "1px"
+                         :overflow         "hidden"
+                         :cursor           "pointer"}
                  :on-click #(fire-event this event)}
            [:div {:style {:position "absolute"
                           :top      "50%"
@@ -83,7 +86,8 @@
                                   lightgrey 30%, lightgrey 40%,
                                   black 40%, black 60%,
                                   lightgrey 60%, lightgrey 70%,
-                                  black 80%, black 100%)"}
+                                  black 80%, black 100%)"
+                        :cursor     "n-resize"}
              :on-click #(reset! unfurled? (not @unfurled?))}]]]))
 
 (defn render-vertical [this pages current button-size collapsed-width-em unfurled-width-em]
@@ -101,13 +105,16 @@
         (let [title (key page)
               event (val page)
               half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
-          [:div {:style {:position         "relative"
+          [:div {:key   (gensym "key-")
+                 :style {:position         "relative"
                          :background-color (if (= current event) "lightgrey" "white")
                          :height           (str button-size "%")
                          :width            (str unfurled-container-width-em "em")
                          :left             "2px"
                          :margin-top       "1px"
-                         :margin-bottom    "1px"}
+                         :margin-bottom    "1px"
+                         :overflow         "hidden"
+                         :cursor           "pointer"}
                  :on-click #(fire-event this event)}
            [:div {:style {:position "absolute"
                           :top      "50%"
@@ -142,7 +149,8 @@
                                   lightgrey 30%, lightgrey 40%,
                                   black 40%, black 60%,
                                   lightgrey 60%, lightgrey 70%,
-                                  black 80%, black 100%)"}
+                                  black 80%, black 100%)"
+                        :cursor     "w-resize"}
              :on-click #(reset! unfurled? (not @unfurled?))}]]]))
 
 (defn render [this attrs]
