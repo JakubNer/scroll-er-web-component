@@ -4,6 +4,7 @@
     [debux.cs.core :refer-macros [clog dbg break]]))
 
 (def unfurled? (r/atom false))
+(def visible?  (r/atom false))
 
 (defn fire-event [this event-text]
   "Dispatch 'goto' events."
@@ -25,7 +26,9 @@
 (defn render-horizontal [this pages current button-size collapsed-width-em unfurled-width-em]
   (let [unfurled-container-width-em (+ unfurled-width-em 2)
         half-text-width-em (/ unfurled-width-em 2)]
-    [:div
+    [:div {:style {:visibility (if @visible? "visible" "hidden")
+                   :opacity    (if @visible? 1 0)
+                   :transition "visibility 0s, opacity .5s linear"}}
      [:div {:style (merge (get-animated-style-map :height collapsed-width-em unfurled-container-width-em)
                           {:position         "fixed"
                            :display          "flex"
@@ -93,7 +96,9 @@
 (defn render-vertical [this pages current button-size collapsed-width-em unfurled-width-em]
   (let [unfurled-container-width-em (+ unfurled-width-em 2)
         half-text-width-em (/ unfurled-width-em 2)]
-    [:div
+    [:div {:style {:visibility (if @visible? "visible" "hidden")
+                   :opacity    (if @visible? 1 0)
+                   :transition "visibility 0s, opacity .5s linear"}}
      [:div {:style (merge (get-animated-style-map :width collapsed-width-em unfurled-container-width-em)
                           {:position         "fixed"
                            :background-color "black"
@@ -161,6 +166,10 @@
         unfurled-width-em @(get attrs "unfurled-width-em")
         pages-count (count pages)
         button-size (get-button-size pages-count)]
+    (when @(get attrs "reappear") ;; whenever reappear triggered, make divs not visible, and animate visible after 500ms
+      (reset! (get attrs "reappear") false)
+      (reset! visible? false)
+      (js/setTimeout #(reset! visible? true) 500))
     (if horizontal?
       (render-horizontal this pages current button-size collapsed-width-em unfurled-width-em)
       (render-vertical this pages current button-size collapsed-width-em unfurled-width-em))))

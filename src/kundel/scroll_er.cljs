@@ -30,6 +30,7 @@
 (def attrs {"pages" (r/atom nil)
             "current" (r/atom nil)
             "horizontal" (r/atom nil)
+            "reappear" (r/atom nil) ;; just change this in some fashion to trigger, update as timestamp?
             "collapsed-width-em" (r/atom nil)
             "unfurled-width-em" (r/atom nil)})
 
@@ -42,7 +43,10 @@
 ;; This list's keys must match the 'attrs' list.
 (def fns {"pages" #(js->clj (.parse js/JSON %2))
           "current" #(do %2)
-          "horizontal" #(= "true" %2)
+          "horizontal" #(do
+                          (.log js/console "horizontal attr :: " %2)
+                          (= "true" (str %2)))
+          "reappear" #(identity true)
           "collapsed-width-em" #(identity 1)
           "unfurled-width-em" #(identity 20)})
 

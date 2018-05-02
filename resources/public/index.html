@@ -52,6 +52,27 @@
             scroller.addEventListener('goto', function(e) {
                     kundel.scroll_er.changed(scroller,"current",null,e.detail);
                 }, true);
+
+            function OrientationChange(mq) {
+                if (mq.matches) {
+                    console.log("orientation :: vertical");
+                    scroller.setAttribute("horizontal", false);
+                    kundel.scroll_er.changed(scroller, "reappear", null, new Date().getTime());
+                    kundel.scroll_er.changed(scroller, "horizontal", null, false);
+                } else {
+                    console.log("orientation :: horizontal");
+                    scroller.setAttribute("horizontal", true);
+                    kundel.scroll_er.changed(scroller, "reappear", null, new Date().getTime());
+                    kundel.scroll_er.changed(scroller, "horizontal", null, true);
+                }
+            }
+
+            if (matchMedia) {
+                const mq = window.matchMedia("(orientation: landscape)");
+                mq.addListener(OrientationChange);
+                OrientationChange(mq);
+            }
+
         </script>
     </body>
 </html>
