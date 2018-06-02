@@ -31,7 +31,7 @@
             "current" (r/atom nil)
             "horizontal" (r/atom nil)
             "reappear" (r/atom nil) ;; just change this in some fashion to trigger, update as timestamp?
-            "font-size-vmin" (r/atom nil)
+            "font-size-supplement-vmin" (r/atom nil)
             "collapsed-width-em" (r/atom nil)
             "unfurled-width-em" (r/atom nil)})
 
@@ -48,7 +48,7 @@
                           (.log js/console "horizontal attr :: " %2)
                           (= "true" (str %2)))
           "reappear" #(identity true)
-          "font-size-vmin" #(identity 2)
+          "font-size-supplement-vmin" #(identity 1)
           "collapsed-width-em" #(identity 1)
           "unfurled-width-em" #(identity 20)})
 
