@@ -13,6 +13,9 @@
         }
 
         #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: lightgrey;
             width: 50%;
             height: 50%;
@@ -24,6 +27,7 @@
         <script>kundel.scroll_er.register()</script>
         <div id="screen">
             <div id="container">
+                <h1 id="feedback">home</h1>
                 <div id="scroll-er"></div>
             </div>
         </div>
@@ -33,7 +37,7 @@
             // List of lists.  Each record is a pair (list) of page titles and event strings.
             // Number of pairs is the number of pages.
             my_pages = [
-                ["description page 1","page1"],
+                ["description page 1","home"],
                 ["description page 2","page2"],
                 ["super long description of page3 that shouldn't fit anywhere and must be trimmed","page3"],
                 ["description page 4","page4"],
@@ -65,7 +69,7 @@
                 ["30","page30"]
             ];
 
-            my_current = "page2";
+            my_current = "home";
 
             scroller.setAttribute("pages", JSON.stringify(my_pages));
             scroller.setAttribute("current", my_current);
@@ -82,6 +86,7 @@
                     // Scroller doesn't update the current selection until this "changed" call feeds back into it.
                     //
                     kundel.scroll_er.changed(scroller,"current",null,e.detail);
+                    document.getElementById('feedback').innerHTML = e.detail;
                 }, true);
 
             function OrientationChange(mq) {
