@@ -24,8 +24,8 @@
    dimension-k (str (if @unfurled? unfurled-width-em collapsed-width-em) "em")})
 
 (defn render-horizontal-page [this current page unfurled-container-width-em unfurled-width-em half-text-width-em]
-  (let [title (key page)
-        event (val page)
+  (let [title (first page)
+        event (second page)
         half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
     [:div {:key   (gensym "key-")
            :style {:position         "relative"
@@ -61,7 +61,8 @@
         half-collapsed-width-em (/ collapsed-width-em 2)
         button-size-first-page (str (get-button-size pages-count) "%")
         button-size-other-pages (str (get-button-size (- pages-count 1)) "%")
-        min-button-size-first-page-em (str (* 3 collapsed-width-em) "em")]
+        min-button-size-first-page-em (str (* 3 collapsed-width-em) "em")
+        first-page-event (second (first pages))]
     [:div {:style {:visibility (if @visible? "visible" "hidden")
                    :opacity    (if @visible? 1 0)
                    :transition "visibility 0s, opacity .5s linear"
@@ -81,7 +82,8 @@
                      :width (str "calc(100% - " button-size-first-page ")")
                      :max-width (str "calc(100% - " min-button-size-first-page-em ")")}}
        (for [page (rest pages)]
-         [:div {:style {:width button-size-other-pages}}
+         [:div {:key   (gensym "keyc-")
+                :style {:width button-size-other-pages}}
           (render-horizontal-page this current page unfurled-container-width-em unfurled-width-em half-text-width-em)])]]
      ;; home button curved top edge
      [:div {:style (merge (get-animated-style-map :bottom collapsed-width-em unfurled-container-width-em)
@@ -101,8 +103,8 @@
                      :height   "110%"
                      :width    "100%"
                      :cursor           "pointer"
-                     :background-color (if (= current (val (first pages))) "lightgrey" "white")}
-             :on-click #(fire-event this (val (first pages)))}]]
+                     :background-color (if (= current first-page-event) "lightgrey" "white")}
+             :on-click #(fire-event this first-page-event)}]]
      ;; home button -- cover with background color border from above
      [:div {:style (merge (get-animated-style-map :bottom 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
@@ -111,16 +113,16 @@
                            :border-left "1px solid #000"
                            :width "1em"
                            :cursor   "pointer"
-                           :background-color (if (= current (val (first pages))) "lightgrey" "white")})
-            :on-click #(fire-event this (val (first pages)))}]
+                           :background-color (if (= current first-page-event) "lightgrey" "white")})
+            :on-click #(fire-event this first-page-event)}]
      [:div {:style (merge (get-animated-style-map :bottom 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
                            :left      "1em"
                            :height    (str (* 2 collapsed-width-em) "em")
                            :width (str (- (* 3 collapsed-width-em) 1) "em")
                            :cursor   "pointer"
-                           :background-color (if (= current (val (first pages))) "lightgrey" "white")})
-            :on-click #(fire-event this (val (first pages)))}]
+                           :background-color (if (= current first-page-event) "lightgrey" "white")})
+            :on-click #(fire-event this first-page-event)}]
      ;; actual home icon
      [:img {:src "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJPSURBVGhD7do5ixRBGIfx8QYRDERQWPAIzQQRBAURv4LgCoLifSsiiIGBkZmIibBgZiAaKpgIot9AEBMxMRINDNREPJ7/sK80RU3121d1g/3CL5iarmaenZmlZ3Yn44zzf806bF20Sgt9zzye4SZWaMEx1/EbfxZ9xnb0NldgD0YewxPzDcV9soBe5jLCByOemNi+h8g+syJMWUxsT/YQRRRf3/IjuC2pmPBYyRpyCWHEO2zCk8KamRUTHifZQmZFbIRmJbwx4TGSJeQiUhE23pjwfuk85AJSEUtwDmumt9Ixy6EJ75NOQzwRd6D1V/DGhOvSWch5eCOMNyZck05C9FKpGmE8MTGthzSJMHViWg05i6YRpmpMayFn0FaEqRLTSkgXEcYb0zjkNLqKMJ6Yl1iKWnMKXUcYT8wDVI7JGWFajzmJ3BGmtZgT6CvCNI4ZQoSpHXMcQ4kwxRhd5pfG7MIvFA/oO8J4Ym5gOuGXBUOJMGUxLzCdzfgELb7BkCJMGPMIWtfb4Rj+zVrshN5YmroRb3EUBxIO4Sli+1OKMXp8e7FjemvGNHkm9Ox6Rj/VD4idI6UYk5wmEV9RZeo8K+KK0W+w2GaPXCFyDcnZjdhGj5wh+sY+OWMIxpAaxhCPMaSGMcRjUCG6cIxt9NBfY6vMc8TO43EVyZlDbKOXrkg9sx5fEDuHx0GUjj5YxTZ7fIc+ft5OuIePiO33+IkNKJ3DiJ1gKO7DPXcRO0nfXmM1Ks0RvEfshLnp/XQLjf7BZgv2YH8P9mEbliExk8lfN8HbebLAzesAAAAASUVORK5CYII="
             :style (merge (get-animated-style-map :bottom (- collapsed-width-em half-collapsed-width-em) (- unfurled-container-width-em half-collapsed-width-em))
@@ -128,7 +130,7 @@
                            :left (str half-collapsed-width-em "em")
                            :height (str (* 2 collapsed-width-em) "em")
                            :cursor   "pointer"})
-            :on-click #(fire-event this (val (first pages)))}]
+            :on-click #(fire-event this first-page-event)}]
      ;; pull out tab
      [:div {:style (merge (get-animated-style-map :bottom collapsed-width-em unfurled-container-width-em)
                           {:position "fixed"
@@ -158,8 +160,8 @@
              :on-click #(reset! unfurled? (not @unfurled?))}]]]))
 
 (defn render-vertical-page [this current page unfurled-container-width-em unfurled-width-em half-text-width-em]
-  (let [title (key page)
-        event (val page)
+  (let [title (first page)
+        event (second page)
         half-text-height-em (/ (+ (quot (count title) unfurled-width-em) 1) 2)]
     [:div {:key   (gensym "key-")
            :style {:position         "relative"
@@ -191,7 +193,8 @@
         half-collapsed-width-em (/ collapsed-width-em 2)
         button-size-first-page (str (get-button-size pages-count) "%")
         button-size-other-pages (str (get-button-size (- pages-count 1)) "%")
-        min-button-size-first-page-em (str (* 3 collapsed-width-em) "em")]
+        min-button-size-first-page-em (str (* 3 collapsed-width-em) "em")
+        first-page-event (second (first pages))]
     [:div {:style {:visibility (if @visible? "visible" "hidden")
                    :opacity    (if @visible? 1 0)
                    :transition "visibility 0s, opacity .5s linear"
@@ -209,7 +212,8 @@
       [:div {:style {:height (str "calc(100% - " button-size-first-page ")")
                      :max-height (str "calc(100% - " min-button-size-first-page-em ")")}}
        (for [page (rest pages)]
-         [:div {:style {:height button-size-other-pages}}
+         [:div {:key   (gensym "keyc-")
+                :style {:height button-size-other-pages}}
           (render-vertical-page this current page unfurled-container-width-em unfurled-width-em half-text-width-em)])]]
      ;; home button curved left edge
      [:div {:style (merge (get-animated-style-map :right collapsed-width-em unfurled-container-width-em)
@@ -229,8 +233,8 @@
                      :width    "110%"
                      :height   "100%"
                      :cursor           "pointer"
-                     :background-color (if (= current (val (first pages))) "lightgrey" "white")}
-             :on-click #(fire-event this (val (first pages)))}]]
+                     :background-color (if (= current first-page-event) "lightgrey" "white")}
+             :on-click #(fire-event this first-page-event)}]]
      ;; home button -- cover with background color border from above
      [:div {:style (merge (get-animated-style-map :right 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
@@ -239,16 +243,16 @@
                            :border-top "1px solid #000"
                            :height "1em"
                            :cursor   "pointer"
-                           :background-color (if (= current (val (first pages))) "lightgrey" "white")})
-            :on-click #(fire-event this (val (first pages)))}]
+                           :background-color (if (= current first-page-event) "lightgrey" "white")})
+            :on-click #(fire-event this first-page-event)}]
      [:div {:style (merge (get-animated-style-map :right 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
                            :top      "1em"
                            :width    (str (* 2 collapsed-width-em) "em")
                            :height (str (- (* 3 collapsed-width-em) 1) "em")
                            :cursor   "pointer"
-                           :background-color (if (= current (val (first pages))) "lightgrey" "white")})
-            :on-click #(fire-event this (val (first pages)))}]
+                           :background-color (if (= current first-page-event) "lightgrey" "white")})
+            :on-click #(fire-event this first-page-event)}]
      ;; actual home icon
      [:img {:src "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJPSURBVGhD7do5ixRBGIfx8QYRDERQWPAIzQQRBAURv4LgCoLifSsiiIGBkZmIibBgZiAaKpgIot9AEBMxMRINDNREPJ7/sK80RU3121d1g/3CL5iarmaenZmlZ3Yn44zzf806bF20Sgt9zzye4SZWaMEx1/EbfxZ9xnb0NldgD0YewxPzDcV9soBe5jLCByOemNi+h8g+syJMWUxsT/YQRRRf3/IjuC2pmPBYyRpyCWHEO2zCk8KamRUTHifZQmZFbIRmJbwx4TGSJeQiUhE23pjwfuk85AJSEUtwDmumt9Ixy6EJ75NOQzwRd6D1V/DGhOvSWch5eCOMNyZck05C9FKpGmE8MTGthzSJMHViWg05i6YRpmpMayFn0FaEqRLTSkgXEcYb0zjkNLqKMJ6Yl1iKWnMKXUcYT8wDVI7JGWFajzmJ3BGmtZgT6CvCNI4ZQoSpHXMcQ4kwxRhd5pfG7MIvFA/oO8J4Ym5gOuGXBUOJMGUxLzCdzfgELb7BkCJMGPMIWtfb4Rj+zVrshN5YmroRb3EUBxIO4Sli+1OKMXp8e7FjemvGNHkm9Ox6Rj/VD4idI6UYk5wmEV9RZeo8K+KK0W+w2GaPXCFyDcnZjdhGj5wh+sY+OWMIxpAaxhCPMaSGMcRjUCG6cIxt9NBfY6vMc8TO43EVyZlDbKOXrkg9sx5fEDuHx0GUjj5YxTZ7fIc+ft5OuIePiO33+IkNKJ3DiJ1gKO7DPXcRO0nfXmM1Ks0RvEfshLnp/XQLjf7BZgv2YH8P9mEbliExk8lfN8HbebLAzesAAAAASUVORK5CYII="
             :style (merge (get-animated-style-map :right (- collapsed-width-em half-collapsed-width-em) (- unfurled-container-width-em half-collapsed-width-em))
@@ -256,7 +260,7 @@
                            :top (str half-collapsed-width-em "em")
                            :width (str (* 2 collapsed-width-em) "em")
                            :cursor   "pointer"})
-            :on-click #(fire-event this (val (first pages)))}]
+            :on-click #(fire-event this first-page-event)}]
      ;; pull out tab
      [:div {:style (merge (get-animated-style-map :right collapsed-width-em unfurled-container-width-em)
                           {:position "fixed"
@@ -287,7 +291,7 @@
 
 (defn render [this attrs]
   (let [horizontal? @(get attrs "horizontal")
-        pages (into [] @(get attrs "pages"))
+        pages @(get attrs "pages")
         current @(get attrs "current")
         font-size-supplement-vmin @(get attrs "font-size-supplement-vmin")
         collapsed-width-em @(get attrs "collapsed-width-em")

@@ -30,40 +30,40 @@
         <script>
             var scroller = document.getElementById('scroll-er');
 
-            // dictionary of page titles to event strings; each key is page title, each value an event string.
-            // number of key-value pairs is the number of pages.
-            my_pages = {
-                "description page 1":"page1",
-                "description page 2":"page2",
-                "super long description of page3 that shouldn't fit anywhere and must be trimmed":"page3",
-                "description page 4":"page4",
-                "5":"page5",
-                "6":"page6",
-                "7":"page7",
-                "8":"page8",
-                "9":"page9",
-                "10":"page10",
-                "11":"page11",
-                "12":"page12",
-                "13":"page13",
-                "14":"page14",
-                "15":"page15",
-                "16":"page16",
-                "page17":"page17",
-                "page18":"page18",
-                "page19":"page19",
-                "20":"page20",
-                "21":"page21",
-                "22":"page22",
-                "23":"page23",
-                "24":"page24",
-                "25":"page25",
-                "26":"page26",
-                "27":"page27",
-                "28":"page28",
-                "29":"page29",
-                "30":"page30"
-            };
+            // List of lists.  Each record is a pair (list) of page titles and event strings.
+            // Number of pairs is the number of pages.
+            my_pages = [
+                ["description page 1","page1"],
+                ["description page 2","page2"],
+                ["super long description of page3 that shouldn't fit anywhere and must be trimmed","page3"],
+                ["description page 4","page4"],
+                ["5","page5"],
+                ["6","page6"],
+                ["7","page7"],
+                ["8","page8"],
+                ["9","page9"],
+                ["10","page10"],
+                ["11","page11"],
+                ["12","page12"],
+                ["13","page13"],
+                ["14","page14"],
+                ["15","page15"],
+                ["16","page16"],
+                ["page17","page17"],
+                ["page18","page18"],
+                ["page19","page19"],
+                ["20","page20"],
+                ["21","page21"],
+                ["22","page22"],
+                ["23","page23"],
+                ["24","page24"],
+                ["25","page25"],
+                ["26","page26"],
+                ["27","page27"],
+                ["28","page28"],
+                ["29","page29"],
+                ["30","page30"]
+            ];
 
             my_current = "page2";
 
@@ -76,6 +76,11 @@
             console.log("catching on :: " + scroller);
             // should be the event string from my_pages configuration.
             scroller.addEventListener('goto', function(e) {
+                    //
+                    // !! IMPORTANT !!
+                    //
+                    // Scroller doesn't update the current selection until this "changed" call feeds back into it.
+                    //
                     kundel.scroll_er.changed(scroller,"current",null,e.detail);
                 }, true);
 
