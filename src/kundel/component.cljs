@@ -1,7 +1,6 @@
 (ns kundel.component
   (:require
-    [reagent.core :as r]
-    [debux.cs.core :refer-macros [clog dbg break]]))
+    [reagent.core :as r]))
 
 (def unfurled? (r/atom false))
 (def visible?  (r/atom false))
