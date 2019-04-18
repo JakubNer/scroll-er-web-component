@@ -50,7 +50,7 @@
           "reappear" #(identity true)
           "font-size-supplement-vmin" #(identity 1)
           "collapsed-width-em" #(identity 1)
-          "unfurled-width-em" #(identity 20)})
+          "unfurled-width-em" #(if %2 (int %2) (identity 20))})
 
 ;; events:  "goto" :: event detail is page title to go to.
 

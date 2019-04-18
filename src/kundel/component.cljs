@@ -20,7 +20,7 @@
    :-moz-transition (str (name dimension-k) " .5s ease-in-out")
    :-o-transition (str (name dimension-k) " .5s ease-in-out")
    :transition (str (name dimension-k) " .5s ease-in-out")
-   dimension-k (str (if @unfurled? unfurled-width-em collapsed-width-em) "em")})
+   dimension-k (str (if @unfurled? unfurled-width-em collapsed-width-em) "rem")})
 
 (defn render-horizontal-page [this current page unfurled-container-width-em unfurled-width-em half-text-width-em]
   (let [title (first page)
@@ -29,7 +29,7 @@
     [:div {:key   (gensym "key-")
            :style {:position         "relative"
                    :background-color (if (= current event) "lightgrey" "white")
-                   :height           (str unfurled-container-width-em "em")
+                   :height           (str unfurled-container-width-em "rem")
                    :width            "100%"
                    :top             "0px"
                    :border-left "1px solid #000"
@@ -47,11 +47,11 @@
                      :-o-transform      "rotate(-90deg)"}}
        [:div {:style {:text-align "center"
                       :font-family "monospace, monospace"
-                      :font-size  "2vmin"
+                      :font-size  "1rem"
                       :position   "absolute"
-                      :width      (str unfurled-width-em "em")
-                      :top        (str "-" half-text-height-em "em")
-                      :left       (str "-" half-text-width-em "em")}}
+                      :width      (str unfurled-width-em "rem")
+                      :top        (str "-" half-text-height-em "rem")
+                      :left       (str "-" half-text-width-em "rem")}}
         title]]]]))
 
 (defn render-horizontal [this pages current pages-count font-size-supplement-vmin collapsed-width-em unfurled-width-em]
@@ -60,7 +60,7 @@
         half-collapsed-width-em (/ collapsed-width-em 2)
         button-size-first-page (str (get-button-size pages-count) "%")
         button-size-other-pages (str (get-button-size (- pages-count 1)) "%")
-        min-button-size-first-page-em (str (* 3 collapsed-width-em) "em")
+        min-button-size-first-page-em (str (* 3 collapsed-width-em) "rem")
         first-page-event (second (first pages))]
     [:div {:style {:visibility (if @visible? "visible" "hidden")
                    :opacity    (if @visible? 1 0)
@@ -73,6 +73,7 @@
                            :bottom           "0"
                            :left             "0"
                            :width            "100%"})
+            :on-mouse-enter #(reset! unfurled? true)                           
             :on-mouse-leave #(reset! unfurled? false)}
       [:div {:style {:width button-size-first-page
                      :min-width min-button-size-first-page-em}}
@@ -89,13 +90,13 @@
                           {:position "fixed"
                            :left      "0px"
                            :background-color "black"
-                           :width (str (* 3 collapsed-width-em) "em")
-                           :height (str (* 2 collapsed-width-em) "em")
+                           :width (str (* 3 collapsed-width-em) "rem")
+                           :height (str (* 2 collapsed-width-em) "rem")
                            :border-top "1px solid #000"
                            :border-right "1px solid #000"
                            :overflow "hidden"
-                           :border-top-right-radius     (str collapsed-width-em "em")
-                           :-moz-border-radius-topright (str collapsed-width-em "em")})}
+                           :border-top-right-radius     (str collapsed-width-em "rem")
+                           :-moz-border-radius-topright (str collapsed-width-em "rem")})}
       [:div {:style {:position "absolute"
                      :top      "1px"
                      :left     "1px"
@@ -108,17 +109,17 @@
      [:div {:style (merge (get-animated-style-map :bottom 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
                            :left     "0px"
-                           :height   (str (* 2 collapsed-width-em) "em")
+                           :height   (str (* 2 collapsed-width-em) "rem")
                            :border-left "1px solid #000"
-                           :width "1em"
+                           :width "1rem"
                            :cursor   "pointer"
                            :background-color (if (= current first-page-event) "lightgrey" "white")})
             :on-click #(fire-event this first-page-event)}]
      [:div {:style (merge (get-animated-style-map :bottom 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
-                           :left      "1em"
-                           :height    (str (* 2 collapsed-width-em) "em")
-                           :width (str (- (* 3 collapsed-width-em) 1) "em")
+                           :left      "1rem"
+                           :height    (str (* 2 collapsed-width-em) "rem")
+                           :width (str (- (* 3 collapsed-width-em) 1) "rem")
                            :cursor   "pointer"
                            :background-color (if (= current first-page-event) "lightgrey" "white")})
             :on-click #(fire-event this first-page-event)}]
@@ -126,8 +127,8 @@
      [:img {:src "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJPSURBVGhD7do5ixRBGIfx8QYRDERQWPAIzQQRBAURv4LgCoLifSsiiIGBkZmIibBgZiAaKpgIot9AEBMxMRINDNREPJ7/sK80RU3121d1g/3CL5iarmaenZmlZ3Yn44zzf806bF20Sgt9zzye4SZWaMEx1/EbfxZ9xnb0NldgD0YewxPzDcV9soBe5jLCByOemNi+h8g+syJMWUxsT/YQRRRf3/IjuC2pmPBYyRpyCWHEO2zCk8KamRUTHifZQmZFbIRmJbwx4TGSJeQiUhE23pjwfuk85AJSEUtwDmumt9Ixy6EJ75NOQzwRd6D1V/DGhOvSWch5eCOMNyZck05C9FKpGmE8MTGthzSJMHViWg05i6YRpmpMayFn0FaEqRLTSkgXEcYb0zjkNLqKMJ6Yl1iKWnMKXUcYT8wDVI7JGWFajzmJ3BGmtZgT6CvCNI4ZQoSpHXMcQ4kwxRhd5pfG7MIvFA/oO8J4Ym5gOuGXBUOJMGUxLzCdzfgELb7BkCJMGPMIWtfb4Rj+zVrshN5YmroRb3EUBxIO4Sli+1OKMXp8e7FjemvGNHkm9Ox6Rj/VD4idI6UYk5wmEV9RZeo8K+KK0W+w2GaPXCFyDcnZjdhGj5wh+sY+OWMIxpAaxhCPMaSGMcRjUCG6cIxt9NBfY6vMc8TO43EVyZlDbKOXrkg9sx5fEDuHx0GUjj5YxTZ7fIc+ft5OuIePiO33+IkNKJ3DiJ1gKO7DPXcRO0nfXmM1Ks0RvEfshLnp/XQLjf7BZgv2YH8P9mEbliExk8lfN8HbebLAzesAAAAASUVORK5CYII="
             :style (merge (get-animated-style-map :bottom (- collapsed-width-em half-collapsed-width-em) (- unfurled-container-width-em half-collapsed-width-em))
                           {:position "fixed"
-                           :left (str half-collapsed-width-em "em")
-                           :height (str (* 2 collapsed-width-em) "em")
+                           :left (str half-collapsed-width-em "rem")
+                           :height (str (* 2 collapsed-width-em) "rem")
                            :cursor   "pointer"})
             :on-click #(fire-event this first-page-event)}]
      ;; pull out tab
@@ -135,20 +136,23 @@
                           {:position "fixed"
                            :left     "50%"})}
       [:div {:style {:position                    "absolute"
-                     :left                        "-2.5em"
+                     :left                        "-2.5rem"
                      :bottom                      "0px"
                      :background-color            "black"
-                     :width                       "5em"
-                     :height                      (str collapsed-width-em "em")
-                     :border-top-right-radius     (str collapsed-width-em "em .5em")
-                     :-moz-border-radius-topright (str collapsed-width-em "em .5em")
-                     :border-top-left-radius      (str collapsed-width-em "em .5em") ;
-                     :-moz-border-radius-topleft  (str collapsed-width-em "em .5em")}}] ;
+                     :width                       "5rem"
+                     :height                      (str collapsed-width-em "rem")
+                     :border-top-right-radius     (str collapsed-width-em "em .5rem")
+                     :-moz-border-radius-topright (str collapsed-width-em "em .5rem")
+                     :border-top-left-radius      (str collapsed-width-em "em .5rem") ;
+                     :-moz-border-radius-topleft  (str collapsed-width-em "em .5rem")}
+             :on-mouse-enter #(reset! unfurled? true)
+             :on-mouse-leave #(reset! unfurled? false)
+             :on-click #(reset! unfurled? (not @unfurled?))}] ;
       [:div {:style    {:position   "absolute"
-                        :right      "-2em"
+                        :right      "-2rem"
                         :bottom     "0px"
-                        :width      "4em"
-                        :height     (str collapsed-width-em "em")
+                        :width      "4rem"
+                        :height     (str collapsed-width-em "rem")
                         :background "linear-gradient(to bottom,
                                   black, black 20%,
                                   lightgrey 30%, lightgrey 40%,
@@ -156,6 +160,8 @@
                                   lightgrey 60%, lightgrey 70%,
                                   black 80%, black 100%)"
                         :cursor     "n-resize"}
+             :on-mouse-enter #(reset! unfurled? true)
+             :on-mouse-leave #(reset! unfurled? false)                        
              :on-click #(reset! unfurled? (not @unfurled?))}]]]))
 
 (defn render-vertical-page [this current page unfurled-container-width-em unfurled-width-em half-text-width-em]
@@ -166,7 +172,7 @@
            :style {:position         "relative"
                    :background-color (if (= current event) "lightgrey" "white")
                    :height           "100%"
-                   :width            (str unfurled-container-width-em "em")
+                   :width            (str unfurled-container-width-em "rem")
                    :left             "0px"
                    :border-left "1px solid #000"
                    :border-bottom "1px solid #000"
@@ -179,11 +185,11 @@
                     :left     "50%"}}
       [:div {:style {:text-align "center"
                      :font-family "monospace, monospace"
-                     :font-size  "2vmin"
+                     :font-size  "1rem"
                      :position   "absolute"
-                     :width      (str unfurled-width-em "em")
-                     :top        (str "-" half-text-height-em "em")
-                     :left       (str "-" half-text-width-em "em")}}
+                     :width      (str unfurled-width-em "rem")
+                     :top        (str "-" half-text-height-em "rem")
+                     :left       (str "-" half-text-width-em "rem")}}
        title]]]))
 
 (defn render-vertical [this pages current pages-count font-size-supplement-vmin collapsed-width-em unfurled-width-em]
@@ -192,7 +198,7 @@
         half-collapsed-width-em (/ collapsed-width-em 2)
         button-size-first-page (str (get-button-size pages-count) "%")
         button-size-other-pages (str (get-button-size (- pages-count 1)) "%")
-        min-button-size-first-page-em (str (* 3 collapsed-width-em) "em")
+        min-button-size-first-page-em (str (* 3 collapsed-width-em) "rem")
         first-page-event (second (first pages))]
     [:div {:style {:visibility (if @visible? "visible" "hidden")
                    :opacity    (if @visible? 1 0)
@@ -204,6 +210,7 @@
                            :top              "0"
                            :right            "0"
                            :height           "100%"})
+            :on-mouse-enter #(reset! unfurled? true)                           
             :on-mouse-leave #(reset! unfurled? false)}
       [:div {:style {:height button-size-first-page
                      :min-height min-button-size-first-page-em}}
@@ -219,13 +226,13 @@
                           {:position "fixed"
                            :top      "0px"
                            :background-color "black"
-                           :height (str (* 3 collapsed-width-em) "em")
-                           :width (str (* 2 collapsed-width-em) "em")
+                           :height (str (* 3 collapsed-width-em) "rem")
+                           :width (str (* 2 collapsed-width-em) "rem")
                            :border-left "1px solid #000"
                            :border-bottom "1px solid #000"
                            :overflow "hidden"
-                           :border-bottom-left-radius     (str collapsed-width-em "em")
-                           :-moz-border-radius-bottomleft (str collapsed-width-em "em")})}
+                           :border-bottom-left-radius     (str collapsed-width-em "rem")
+                           :-moz-border-radius-bottomleft (str collapsed-width-em "rem")})}
       [:div {:style {:position "absolute"
                      :left     "1px"
                      :top      "1px"
@@ -238,17 +245,17 @@
      [:div {:style (merge (get-animated-style-map :right 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
                            :top      "0px"
-                           :width    (str (* 2 collapsed-width-em) "em")
+                           :width    (str (* 2 collapsed-width-em) "rem")
                            :border-top "1px solid #000"
-                           :height "1em"
+                           :height "1rem"
                            :cursor   "pointer"
                            :background-color (if (= current first-page-event) "lightgrey" "white")})
             :on-click #(fire-event this first-page-event)}]
      [:div {:style (merge (get-animated-style-map :right 0 (- unfurled-container-width-em collapsed-width-em))
                           {:position "fixed"
-                           :top      "1em"
-                           :width    (str (* 2 collapsed-width-em) "em")
-                           :height (str (- (* 3 collapsed-width-em) 1) "em")
+                           :top      "1rem"
+                           :width    (str (* 2 collapsed-width-em) "rem")
+                           :height (str (- (* 3 collapsed-width-em) 1) "rem")
                            :cursor   "pointer"
                            :background-color (if (= current first-page-event) "lightgrey" "white")})
             :on-click #(fire-event this first-page-event)}]
@@ -256,8 +263,8 @@
      [:img {:src "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJPSURBVGhD7do5ixRBGIfx8QYRDERQWPAIzQQRBAURv4LgCoLifSsiiIGBkZmIibBgZiAaKpgIot9AEBMxMRINDNREPJ7/sK80RU3121d1g/3CL5iarmaenZmlZ3Yn44zzf806bF20Sgt9zzye4SZWaMEx1/EbfxZ9xnb0NldgD0YewxPzDcV9soBe5jLCByOemNi+h8g+syJMWUxsT/YQRRRf3/IjuC2pmPBYyRpyCWHEO2zCk8KamRUTHifZQmZFbIRmJbwx4TGSJeQiUhE23pjwfuk85AJSEUtwDmumt9Ixy6EJ75NOQzwRd6D1V/DGhOvSWch5eCOMNyZck05C9FKpGmE8MTGthzSJMHViWg05i6YRpmpMayFn0FaEqRLTSkgXEcYb0zjkNLqKMJ6Yl1iKWnMKXUcYT8wDVI7JGWFajzmJ3BGmtZgT6CvCNI4ZQoSpHXMcQ4kwxRhd5pfG7MIvFA/oO8J4Ym5gOuGXBUOJMGUxLzCdzfgELb7BkCJMGPMIWtfb4Rj+zVrshN5YmroRb3EUBxIO4Sli+1OKMXp8e7FjemvGNHkm9Ox6Rj/VD4idI6UYk5wmEV9RZeo8K+KK0W+w2GaPXCFyDcnZjdhGj5wh+sY+OWMIxpAaxhCPMaSGMcRjUCG6cIxt9NBfY6vMc8TO43EVyZlDbKOXrkg9sx5fEDuHx0GUjj5YxTZ7fIc+ft5OuIePiO33+IkNKJ3DiJ1gKO7DPXcRO0nfXmM1Ks0RvEfshLnp/XQLjf7BZgv2YH8P9mEbliExk8lfN8HbebLAzesAAAAASUVORK5CYII="
             :style (merge (get-animated-style-map :right (- collapsed-width-em half-collapsed-width-em) (- unfurled-container-width-em half-collapsed-width-em))
                           {:position "fixed"
-                           :top (str half-collapsed-width-em "em")
-                           :width (str (* 2 collapsed-width-em) "em")
+                           :top (str half-collapsed-width-em "rem")
+                           :width (str (* 2 collapsed-width-em) "rem")
                            :cursor   "pointer"})
             :on-click #(fire-event this first-page-event)}]
      ;; pull out tab
@@ -265,20 +272,23 @@
                           {:position "fixed"
                            :top      "50%"})}
       [:div {:style {:position                      "absolute"
-                     :top                           "-2.5em"
+                     :top                           "-2.5rem"
                      :right                         "0px"
                      :background-color              "black"
-                     :height                        "5em"
-                     :width                         (str collapsed-width-em "em")
-                     :border-top-left-radius        (str collapsed-width-em "em .5em")
-                     :-moz-border-radius-topleft    (str collapsed-width-em "em .5em")
-                     :border-bottom-left-radius     (str collapsed-width-em "em .5em") ;
-                     :-moz-border-radius-bottomleft (str collapsed-width-em "em .5em")}}] ;
+                     :height                        "5rem"
+                     :width                         (str collapsed-width-em "rem")
+                     :border-top-left-radius        (str collapsed-width-em "em .5rem")
+                     :-moz-border-radius-topleft    (str collapsed-width-em "em .5rem")
+                     :border-bottom-left-radius     (str collapsed-width-em "em .5rem") ;
+                     :-moz-border-radius-bottomleft (str collapsed-width-em "em .5rem")}
+             :on-mouse-enter #(reset! unfurled? true)                           
+             :on-mouse-leave #(reset! unfurled? false)
+             :on-click #(reset! unfurled? (not @unfurled?))}] ;
       [:div {:style    {:position   "absolute"
-                        :top        "-2em"
+                        :top        "-2rem"
                         :right      "0px"
-                        :height     "4em"
-                        :width      (str collapsed-width-em "em")
+                        :height     "4rem"
+                        :width      (str collapsed-width-em "rem")
                         :background "linear-gradient(to right,
                                   black, black 20%,
                                   lightgrey 30%, lightgrey 40%,
@@ -286,6 +296,8 @@
                                   lightgrey 60%, lightgrey 70%,
                                   black 80%, black 100%)"
                         :cursor     "w-resize"}
+             :on-mouse-enter #(reset! unfurled? true)                           
+             :on-mouse-leave #(reset! unfurled? false)
              :on-click #(reset! unfurled? (not @unfurled?))}]]]))
 
 (defn render [this attrs]
