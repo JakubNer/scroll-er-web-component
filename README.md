@@ -30,6 +30,12 @@ Title of currently selected page.
 
 If *true*, the scroller will be at the bottom and pages will be side-to-side.
 
+### Functions
+
+#### furl/unfurl
+
+Functions to furl and unfurl the scroller.
+
 ## Dev Run Application:
 
 ```

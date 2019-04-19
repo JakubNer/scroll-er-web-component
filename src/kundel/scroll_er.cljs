@@ -82,3 +82,9 @@
                             "attributeChangedCallback" #(this-as this (changed this %1 %2 %3)))]
       (go/extend proto proto')
       (.registerElement js/document element-name #js{"prototype" proto}))))
+
+(defn ^:export unfurl [this]
+  (c/unfurl this))
+
+(defn ^:export furl [this]
+  (c/furl this))

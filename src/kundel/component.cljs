@@ -65,7 +65,7 @@
     [:div {:style {:visibility (if @visible? "visible" "hidden")
                    :opacity    (if @visible? 1 0)
                    :transition "visibility 0s, opacity .5s linear"
-                   :font-size (str "calc(" collapsed-width-em "em + " font-size-supplement-vmin "vmin)")}}
+                   :font-size (str "calc(" collapsed-width-em "rem + " font-size-supplement-vmin "vmin)")}}
      ;; notches, one per page
      [:div {:style (merge (get-animated-style-map :height collapsed-width-em unfurled-container-width-em)
                           {:position         "fixed"
@@ -141,10 +141,10 @@
                      :background-color            "black"
                      :width                       "5rem"
                      :height                      (str collapsed-width-em "rem")
-                     :border-top-right-radius     (str collapsed-width-em "em .5rem")
-                     :-moz-border-radius-topright (str collapsed-width-em "em .5rem")
-                     :border-top-left-radius      (str collapsed-width-em "em .5rem") ;
-                     :-moz-border-radius-topleft  (str collapsed-width-em "em .5rem")}
+                     :border-top-right-radius     (str collapsed-width-em "rem .5rem")
+                     :-moz-border-radius-topright (str collapsed-width-em "rem .5rem")
+                     :border-top-left-radius      (str collapsed-width-em "rem .5rem") ;
+                     :-moz-border-radius-topleft  (str collapsed-width-em "rem .5rem")}
              :on-mouse-enter #(reset! unfurled? true)
              :on-mouse-leave #(reset! unfurled? false)
              :on-click #(reset! unfurled? (not @unfurled?))}] ;
@@ -203,7 +203,7 @@
     [:div {:style {:visibility (if @visible? "visible" "hidden")
                    :opacity    (if @visible? 1 0)
                    :transition "visibility 0s, opacity .5s linear"
-                   :font-size (str "calc(" collapsed-width-em "em + " font-size-supplement-vmin "vmin)")}}
+                   :font-size (str "calc(" collapsed-width-em "rem + " font-size-supplement-vmin "vmin)")}}
      ;; notches, one per page
      [:div {:style (merge (get-animated-style-map :width collapsed-width-em unfurled-container-width-em)
                           {:position         "fixed"
@@ -277,10 +277,10 @@
                      :background-color              "black"
                      :height                        "5rem"
                      :width                         (str collapsed-width-em "rem")
-                     :border-top-left-radius        (str collapsed-width-em "em .5rem")
-                     :-moz-border-radius-topleft    (str collapsed-width-em "em .5rem")
-                     :border-bottom-left-radius     (str collapsed-width-em "em .5rem") ;
-                     :-moz-border-radius-bottomleft (str collapsed-width-em "em .5rem")}
+                     :border-top-left-radius        (str collapsed-width-em "rem .5rem")
+                     :-moz-border-radius-topleft    (str collapsed-width-em "rem .5rem")
+                     :border-bottom-left-radius     (str collapsed-width-em "rem .5rem") ;
+                     :-moz-border-radius-bottomleft (str collapsed-width-em "rem .5rem")}
              :on-mouse-enter #(reset! unfurled? true)                           
              :on-mouse-leave #(reset! unfurled? false)
              :on-click #(reset! unfurled? (not @unfurled?))}] ;
@@ -299,6 +299,10 @@
              :on-mouse-enter #(reset! unfurled? true)                           
              :on-mouse-leave #(reset! unfurled? false)
              :on-click #(reset! unfurled? (not @unfurled?))}]]]))
+
+(defn unfurl [this] (reset! unfurled? true))
+
+(defn furl [this] (reset! unfurled? false))
 
 (defn render [this attrs]
   (let [horizontal? @(get attrs "horizontal")
